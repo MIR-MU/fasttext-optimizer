@@ -58,7 +58,8 @@ def _tqdm(*args, **kwargs):
     return _tqdm_tqdm(*args, **{**kwargs, **{'miniters': 10000}})
 
 
-def read_words(subset='validation', language='cs', percentage=0.1):
+def read_words(subset='validation', language='cs'):
+    percentage = 0.1 if subset == 'test' else 1.0
     filename, num_lines = FILENAMES[language][subset]
     filename = Path(filename)
     num_lines = int(num_lines)

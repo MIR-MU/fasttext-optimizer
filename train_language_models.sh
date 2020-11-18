@@ -2,10 +2,10 @@
 
 source ./common.sh
 
-FASTTEXT_MODEL_DIRECTORY="$PWD"/data/wikimedia
-LANGUAGE_MODEL_DIRECTORY="$PWD"/data/wmt13
+FASTTEXT_MODEL_DIRECTORY="$PWD"/../data/wikimedia
+LANGUAGE_MODEL_DIRECTORY="$PWD"/../data/wmt13
 SCRIPT_DIRECTORY=languageModels
-LANGUAGE_MODEL_PARAMETERS=(--cuda --tied --emsize 100 --nhid 100 --nlayers 1 --dropout 0 --epochs 1)
+LANGUAGE_MODEL_PARAMETERS=(--cuda --tied --emsize 300 --nhid 300 --nlayers 1 --dropout 0 --epochs 1)
 
 cd "$SCRIPT_DIRECTORY"
 
@@ -20,18 +20,18 @@ fi
 for LANGUAGE
 do
 
-    for NGRAM_SIZES in default suggested
+    for EMBEDDING_TYPE in baseline extended
     do
 
-        echo Training "$LANGUAGE" language model with "$NGRAM_SIZES" n-gram sizes
+        echo Training "$LANGUAGE" language model with "$EMBEDDING_TYPE" n-gram sizes
 
-        BATCH_SIZE=10
+        BATCH_SIZE=100
         while (( BATCH_SIZE > 0 ))
         do
 
-            FASTTEXT_MODEL_BASENAME="$FASTTEXT_MODEL_DIRECTORY"/wiki."$LANGUAGE"."$NGRAM_SIZES"
-            FASTTEXT_MODEL_FILENAME="$FASTTEXT_MODEL_BASENAME".bin
-            LANGUAGE_MODEL_BASENAME="$LANGUAGE_MODEL_DIRECTORY"/wiki."$LANGUAGE".lm."$NGRAM_SIZES"
+            FASTTEXT_MODEL_BASENAME="$FASTTEXT_MODEL_DIRECTORY"/wiki."$LANGUAGE"."$EMBEDDING_TYPE"
+            FASTTEXT_MODEL_FILENAME="$FASTTEXT_MODEL_BASENAME".vec
+            LANGUAGE_MODEL_BASENAME="$LANGUAGE_MODEL_DIRECTORY"/wiki."$LANGUAGE".lm."$EMBEDDING_TYPE"
             LANGUAGE_MODEL_LOG_FILENAME="$LANGUAGE_MODEL_BASENAME".log.gz
             LANGUAGE_MODEL_FILENAME="$LANGUAGE_MODEL_BASENAME".pt
             CURRENT_LANGUAGE_MODEL_PARAMETERS=("${LANGUAGE_MODEL_PARAMETERS[@]}" --batch_size "$BATCH_SIZE" --language "$LANGUAGE" --save "${LANGUAGE_MODEL_FILENAME}" --fasttext_model "$FASTTEXT_MODEL_FILENAME")

@@ -70,12 +70,12 @@ class RNNModel(nn.Module):
 class StaticEmbRNNModel(RNNModel):
     """Container module with an encoder, a recurrent module, and a decoder."""
 
-    def __init__(self, *args, language, model_dir="embeddings/wiki.cs.train.suggested.bin"): # , data_dir="data/cze-wikitext"):
-        from gensim.models.fasttext import load_facebook_model
-        model = load_facebook_model(model_dir)
+    def __init__(self, *args, language, model_dir="embeddings/wiki.cs.train.suggested.vec"): # , data_dir="data/cze-wikitext"):
+        from gensim.models import KeyedVectors
+        model = KeyedVectors.load_word2vec_format(model_dir, binary=False, limit=2*10**5)
 
         ninp = args[2]
-        ndims = model.wv.vectors.shape[1]
+        ndims = model.vectors.shape[1]
         assert ninp <= ndims
         if ninp < ndims:
             print('Trimming fastText embeddings to the first {} dimensions out of {}'.format(ninp, ndims))
@@ -87,7 +87,7 @@ class StaticEmbRNNModel(RNNModel):
         found_words = 0
         for subset in ('train', 'validation', 'test'):
             for word in data.read_words(language=language, subset=subset):
-                if word not in vocab_word_set:
+                if word not in vocab_word_set and word in model:
                     vocab_words.append(word)
                     vocab_word_set.add(word)
                     vocab_vecs.append(model[word][:ninp])

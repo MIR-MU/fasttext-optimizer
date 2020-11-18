@@ -55,10 +55,10 @@ class Corpus(object):
                 self.dictionary.add_word(word)
 
         # Tokenize file content
-        oov_words = []
         ids = []
         for word in words():
-            ids.append(self.dictionary.word2idx[word])
+            if word in self.dictionary.word2idx:
+                ids.append(self.dictionary.word2idx[word])
         ids = torch.tensor(ids).type(torch.int64)
 
         return ids
