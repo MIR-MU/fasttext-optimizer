@@ -76,7 +76,7 @@ import json
 from sys import argv, stdout
 
 
-OPTIMUM_POINT_ESTIMATE = 3.76
+OPTIMUM_POINT_ESTIMATE = 4.91
 SUBTERM_SIZE_FROM, SUBTERM_SIZE_TO = 1, 10
 
 
