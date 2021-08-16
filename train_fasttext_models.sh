@@ -22,7 +22,7 @@ do
         download_wikipedia_dump "$LANGUAGE"
     fi
 
-    SUGGESTED_NGRAM_SIZES=($(./suggest_subword_sizes.sh "$LANGUAGE" | grep '^Suggested subword sizes' | sed -r 's/.*(-minn [0-9]* -maxn [0-9]*).*/\1/'))
+    read -r -a SUGGESTED_NGRAM_SIZES <<< "$(./suggest_subword_sizes.sh "$LANGUAGE" | grep '^Suggested subword sizes' | sed -r 's/.*(-minn [0-9]* -maxn [0-9]*).*/\1/')"
     INPUT=(-input "$OUTPUT_DIRECTORY"/wiki."$LANGUAGE".txt)
 
     OUTPUT_BASENAME="$OUTPUT_DIRECTORY"/wiki."$LANGUAGE".default
@@ -30,7 +30,7 @@ do
     INPUT_OUTPUT=("${INPUT[@]}" -output "$OUTPUT_BASENAME")
     if [[ ! -e "$OUTPUT_BASENAME".vec ]]
     then
-        echo Training "$LANGUAGE" fastText model with default n-gram sizes "(${DEFAULT_NGRAM_SIZES[@]})"
+        echo Training "$LANGUAGE" fastText model with default n-gram sizes "(${DEFAULT_NGRAM_SIZES[*]})"
         trap 'rm "$LOG_FILENAME"' EXIT
         "$FASTTEXT" "${FASTTEXT_PARAMETERS[@]}" "${INPUT_OUTPUT[@]}" "${DEFAULT_NGRAM_SIZES[@]}"   |& tee >(gzip > "$LOG_FILENAME")
         trap '' EXIT
@@ -42,7 +42,7 @@ do
     if [[ ! -e "$OUTPUT_BASENAME".vec ]]
     then
         trap 'rm "$LOG_FILENAME"' EXIT
-        echo Training "$LANGUAGE" fastText model with suggested n-gram sizes "(${SUGGESTED_NGRAM_SIZES[@]})"
+        echo Training "$LANGUAGE" fastText model with suggested n-gram sizes "(${SUGGESTED_NGRAM_SIZES[*]})"
         "$FASTTEXT" "${FASTTEXT_PARAMETERS[@]}" "${INPUT_OUTPUT[@]}" "${SUGGESTED_NGRAM_SIZES[@]}" |& tee >(gzip > "$LOG_FILENAME")
         trap '' EXIT
     fi

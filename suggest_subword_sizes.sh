@@ -4,15 +4,15 @@ source ./common.sh
 
 for LANGUAGE
 do
-    if [[ ! -e data/wikimedia/wiki.$LANGUAGE.txt && ! -e data/wikimedia/wiki.$LANGUAGE.json ]]
+    if [[ ! -e data/wikimedia/wiki."$LANGUAGE".txt && ! -e data/wikimedia/wiki."$LANGUAGE".json ]]
     then
         download_wikipedia_dump "$LANGUAGE"
     fi
 
-    if [[ ! -e data/wikimedia/wiki.$LANGUAGE.json ]]
+    if [[ ! -e data/wikimedia/wiki."$LANGUAGE".json ]]
     then
-        trap "rm data/wikimedia/wiki.$LANGUAGE.json" EXIT
-        printf 'Saving subterm frequency statistics to data/wikimedia/wiki.%s.json\n' $LANGUAGE
+        trap 'rm data/wikimedia/wiki."$LANGUAGE".json' EXIT
+        printf 'Saving subterm frequency statistics to data/wikimedia/wiki.%s.json\n' "$LANGUAGE"
         python3 -c '
 from itertools import combinations
 from sys import argv, stdout
@@ -40,7 +40,7 @@ with open(filename, "rt", encoding="utf-8") as f:
         for token in tokens:
             for subtoken in subtokens(token):
                 stdout.buffer.write("{}\n".format(subtoken).encode("utf-8"))
-' $LANGUAGE | sort -u | python3 -c '
+' "$LANGUAGE" | sort -u | python3 -c '
 from io import TextIOWrapper
 from sys import stdin
 
@@ -65,7 +65,7 @@ results = {
     "subterm_length_freqs": subterm_length_freqs,
 }
 print(json.dumps(results, sort_keys=True, indent=4))
-' > data/wikimedia/wiki.$LANGUAGE.json
+' > data/wikimedia/wiki."$LANGUAGE".json
     fi
 
     trap '' EXIT
@@ -104,5 +104,5 @@ print(
         best_coverage,
     )
 )
-' $LANGUAGE
+' "$LANGUAGE"
 done

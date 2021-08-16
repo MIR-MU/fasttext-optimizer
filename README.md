@@ -1,9 +1,12 @@
 # FastText Subword Size Optimizer
 
- [![badge][]][colab]
+ [![actions-badge][]][actions]
+ [![colab-badge][]][colab]
 
- [badge]: https://colab.research.google.com/assets/colab-badge.svg
- [colab]: https://colab.research.google.com/github/MIR-MU/fasttext-optimizer/blob/master/correlate_language_distances.ipynb
+ [actions-badge]: https://github.com/MIR-MU/fasttext-optimizer/workflows/Test/badge.svg
+ [actions]:       https://github.com/MIR-MU/fasttext-optimizer/actions?query=workflow%3ATest
+ [colab-badge]:   https://colab.research.google.com/assets/colab-badge.svg
+ [colab]:         https://colab.research.google.com/github/MIR-MU/fasttext-optimizer/blob/master/correlate_language_distances.ipynb
 
 Suggests subword sizes for fastText language models using character n-gram
 frequency analysis.
