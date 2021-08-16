@@ -21,10 +21,10 @@ $ git clone https://github.com/MIR-MU/fasttext-optimizer.git --recurse-submodule
 $ cd fasttext-optimizer
 $ TMPDIR=/var/tmp ./suggest_subword_sizes.sh en de cs it
 
-Suggested subword sizes for en: -minn 4 -maxn 5 (3.76% n-gram coverage)
+Suggested subword sizes for en: -minn 1 -maxn 5 (4.52% n-gram coverage)
 Suggested subword sizes for de: -minn 6 -maxn 6 (4.19% n-gram coverage)
 Suggested subword sizes for cs: -minn 1 -maxn 4 (3.28% n-gram coverage)
-Suggested subword sizes for it: -minn 2 -maxn 5 (3.81% n-gram coverage)
+Suggested subword sizes for it: -minn 6 -maxn 6 (5.11% n-gram coverage)
 ```
 
 To see how you can suggest subword sizes in Python, see also [our Python
